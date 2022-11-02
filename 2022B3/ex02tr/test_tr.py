@@ -26,3 +26,9 @@ def test_2_to_1():
 def test_remove():
     ab_to_c_tr = tr('ab', 'x')
     assert ab_to_c_tr('abcdabcd') == 'xxcdxxcd'
+
+
+def test_5_to_3():
+    aeiou_to_xyz_tr = tr('aeiou', 'xyz')
+    assert aeiou_to_xyz_tr('the quick brown fox jumps over the lazy dog') \
+           == 'thy qzzck brzwn fzx jzmps zvyr thy lxzy dzg'
