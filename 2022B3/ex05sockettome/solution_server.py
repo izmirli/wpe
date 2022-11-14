@@ -34,8 +34,17 @@ def run_server():
 
     client_sock = get_client_connection(sock)
     while True:
-        data = client_sock.recv(1024).decode().strip()  # receive up to 1KB bytes & decode to str.
+        try:
+            data = client_sock.recv(1024).decode().strip()  # receive up to 1KB bytes & decode to str.
+        except ConnectionAbortedError as cae:
+            logging.error(cae)
+            break
         command = data.split()[0] if data else ''
+        if not command:  # looks like user has disconnected.
+            logging.warning("User has disconnected before 'by' message.")
+            client_sock.close()
+            break
+
         if command not in MESSAGES:
             sent = client_sock.send(f"Unknown command '{data}'".encode())
             logging.info("Sent %d bytes in respond to unknown command (%s)." % (sent, command))
