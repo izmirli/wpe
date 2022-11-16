@@ -1,4 +1,4 @@
-"""Simple message client."""
+"""Client for pickled server responds."""
 import pickle
 import socket
 
@@ -8,6 +8,8 @@ SERVER_PORT = 9999
 
 def send_client_message(sock: socket, message: str) -> str:
     """Sends given message through given socket & return server's respond.
+
+    Server's respond are expected to be in pickle format.
 
     :param sock: socket
     :param message: message to send
@@ -35,7 +37,6 @@ def run_client():
     print(send_client_message(s, 'numbers'))
     print(send_client_message(s, 'reverse_word elephant'))
     print(send_client_message(s, 'unicode_map abracadabra'))
-    print(send_client_message(s, 'garbage'))
     print(send_client_message(s, 'blah blah blah'))
     print(send_client_message(s, 'bye'))
     s.close()

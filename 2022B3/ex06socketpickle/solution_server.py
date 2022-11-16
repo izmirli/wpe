@@ -1,8 +1,6 @@
-"""Simple server.
+"""Pickled server.
 
-Listen at fixed port, and responds to 3 messages.
-'bye' message from client closes server.
-
+Listen at fixed port; support 3 functions and bye command.
 Logging to console.
 """
 import logging
@@ -23,10 +21,9 @@ logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', level=lo
 
 
 def run_server():
-    """Runs a single connection server.
+    """Runs a single connection server, respond in pickle format.
 
-    Support 3 message types: "say", "increment" & "bye".
-    Other messages will result in "Unknown command" being returned.
+    Support pre-defined message types, otherwise sends "Unknown" respond.
 
     :return: None
     """
