@@ -9,6 +9,7 @@ import glob
 import logging
 import pickle
 import socket
+from types import FunctionType
 
 SERVER_IP = '127.0.0.1'  # localhost IP.
 SERVER_PORT = 9999
@@ -25,15 +26,18 @@ def get_actions_from_local_files() -> dict:
 
     :return: mapping for functions the server supports.
     """
-    actions = {
-        'bye': lambda x: "bye",
-        '': lambda x: f"Unknown command '{x}'",
-    }
+    actions = {}
     for func_file in glob.iglob('server_func_*.py'):
+        code_globals = {}
         with open(func_file) as ffh:
             code = ffh.read()
-        exec(code, actions)
+        exec(code, code_globals)
+        for code_global in code_globals:
+            if not code_global.startswith('__') and isinstance(code_globals[code_global], FunctionType):
+                actions[code_global] = code_globals[code_global]
 
+    actions['bye'] = lambda x: "bye"
+    actions[''] = lambda x: f"Unknown command '{x}'"
     return actions
 
 
@@ -45,6 +49,7 @@ def run_server():
     :return: None
     """
     actions = get_actions_from_local_files()
+    logging.info(actions)
 
     sock: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP/IP
     sock.bind((SERVER_IP, SERVER_PORT))  # bind server's address.
