@@ -1,5 +1,7 @@
-"""
+"""Arrow date.
 
+Wrapper for datetime.date with external function `get` that returns an
+Arrow date object.
 """
 import datetime
 
